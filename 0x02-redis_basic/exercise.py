@@ -1,11 +1,16 @@
+#!/usr/bin/env python3
+"""Module for a simple Redis-backed Cache class using redis-py."""
+
 import redis
 import uuid
 from typing import Union
 
 
 class Cache:
+    """Cache class for storing and retrieving data from Redis."""
+
     def __init__(self) -> None:
-        """Initialize the Cache"""
+        """Initialize the Cache instance with a clean Redis database."""
         self._redis = redis.Redis()
         self._redis.flushdb()
 
