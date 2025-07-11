@@ -8,7 +8,7 @@ from functools import wraps
 
 def replay(method: Callable) -> None:
     """
-    Display the history of calls of a particular function.
+    Display the history of calls of a particular function for tracking purposes.
     """
     redis_instance = method.__self__._redis
     method_name = method.__qualname__
