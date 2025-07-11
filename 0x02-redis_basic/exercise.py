@@ -1,18 +1,20 @@
 import redis
 import uuid
+from typing import Union
 
-class Cache(object):
-    def __init__(self):
+
+class Cache:
+    def __init__(self) -> None:
         """Initialize the Cache"""
         self._redis = redis.Redis()
         self._redis.flushdb()
 
-    def store(self, data):
-        """Store data in Redis"""
-        key = str(uuid.uuid4()) # Generate a random UUID (version 4)
+    def store(self, data: Union[str, bytes, int, float]) -> str:
+        """Store data in Redis and return the generated key"""
+        key = str(uuid.uuid4())
         self._redis.set(key, data)
         return key
 
-    def get(self, key):
-        """Get data from Redis"""
+    def get(self, key: str) -> Union[bytes, None]:
+        """Get data from Redis by key"""
         return self._redis.get(key)
