@@ -8,6 +8,7 @@ Cache = __import__('exercise').Cache
 
 cache = Cache()
 
+# Task 1
 data = b"hello"
 key = cache.store(data)
 print(key)
@@ -15,6 +16,8 @@ print(key)
 local_redis = redis.Redis()
 print(local_redis.get(key))
 
+
+# Task 2
 TEST_CASES = {
     b"foo": None,
     123: int,
@@ -28,3 +31,11 @@ for value, fn in TEST_CASES.items():
     print("Raw from Redis:", raw)
     print("Converted via cache.get:", converted)
     assert converted == value
+
+# Task 3
+cache.store(b"first")
+print(cache.get(cache.store.__qualname__))  # Should print b'1'
+
+cache.store(b"second")
+cache.store(b"third")
+print(cache.get(cache.store.__qualname__))  # Should print b'3'
