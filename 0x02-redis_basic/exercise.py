@@ -20,15 +20,18 @@ def count_calls(method: Callable) -> Callable:
 
 def call_history(method: Callable) -> Callable:
     """
-    Decorator to store the history of inputs and outputs for a function in Redis.
+    Decorator to store the history of inputs
+    and outputs for a function in Redis.
     """
     @wraps(method)
     def wrapper(self, *args, **kwargs):
         input_key = f"{method.__qualname__}:inputs"
         output_key = f"{method.__qualname__}:outputs"
 
+        # Store input arguments as a string
         self._redis.rpush(input_key, str(args))
 
+        # Call the actual method and store output
         result = method(self, *args, **kwargs)
         self._redis.rpush(output_key, str(result))
 
@@ -38,7 +41,10 @@ def call_history(method: Callable) -> Callable:
 
 
 class Cache:
-    """Cache class for storing and retrieving data from Redis, with history tracking."""
+    """
+    Cache class for storing and retrieving data
+    from Redis, with history tracking..
+    """
 
     def __init__(self) -> None:
         """Initialize the Cache instance with a clean Redis database."""
@@ -84,7 +90,8 @@ class Cache:
 
 def replay(method: Callable) -> None:
     """
-    Display the history of calls of a particular function for tracking purposes.
+    Display the history of calls of a particular
+    function for tracking purposes.
     """
     redis_instance = method.__self__._redis
     method_name = method.__qualname__
