@@ -6,6 +6,7 @@ import uuid
 from typing import Union, Optional, Callable
 from functools import wraps
 
+
 def count_calls(method: Callable) -> Callable:
     """
     Decorator that counts how many times a method is called.
@@ -26,10 +27,8 @@ def call_history(method: Callable) -> Callable:
         input_key = f"{method.__qualname__}:inputs"
         output_key = f"{method.__qualname__}:outputs"
 
-        # Store input arguments as a string
         self._redis.rpush(input_key, str(args))
 
-        # Call the actual method and store output
         result = method(self, *args, **kwargs)
         self._redis.rpush(output_key, str(result))
 
@@ -39,7 +38,7 @@ def call_history(method: Callable) -> Callable:
 
 
 class Cache:
-    """Cache class for storing and retrieving data from Redis, with history tracking.."""
+    """Cache class for storing and retrieving data from Redis, with history tracking."""
 
     def __init__(self) -> None:
         """Initialize the Cache instance with a clean Redis database."""
@@ -54,7 +53,12 @@ class Cache:
         self._redis.set(key, data)
         return key
 
-    def get(self, key: str, fn: Optional[Callable[[bytes], Union[str, int, float, bytes]]] = None) -> Union[str, int, float, bytes, None]:
+    def get(
+        self,
+        key: str,
+        fn: Optional[Callable[[bytes],
+                              Union[str, int, float, bytes]]] = None
+    ) -> Union[str, int, float, bytes, None]:
         """
         Retrieve data from Redis by key, with optional conversion function.
         """
@@ -76,7 +80,7 @@ class Cache:
         Retrieve an integer from Redis.
         """
         return self.get(key, fn=lambda d: int(d) if d else None)
-    
+
 
 def replay(method: Callable) -> None:
     """
